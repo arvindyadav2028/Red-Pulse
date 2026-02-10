@@ -1,16 +1,25 @@
-# React + Vite
+# Life Line - React + Tailwind demo
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a ready-to-edit React + Tailwind scaffold that reproduces the layout in your screenshot.
 
-Currently, two official plugins are available:
+## What's included
+- Vite + React app skeleton
+- Tailwind config
+- A simple component layout that matches the screenshot (Hero, Capabilities, Dashboard, Join form)
+- An asset copied from your uploaded image (src/assets/hero.jpg)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## How to run
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+2. Start dev server:
+   ```bash
+   npm run dev
+   ```
+3. Open the printed local URL (usually http://localhost:5173).
 
-## React Compiler
+## Note
+The project contains only source files (no node_modules). Tailwind is configured and the project is ready to `npm install` + `npm run dev`.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+The original image used in the hero has been copied from `/mnt/data/WhatsApp Image 2025-11-13 at 12.17.07_37908e1a.jpg` into `src/assets/hero.jpg`.
