@@ -1,4 +1,4 @@
-# Life Line - React + Tailwind demo
+# Red Pulse - React + Tailwin
 
 This project is a ready-to-edit React + Tailwind scaffold that reproduces the layout in your screenshot.
 

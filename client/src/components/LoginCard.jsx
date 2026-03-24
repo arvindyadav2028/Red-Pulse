@@ -1,5 +1,5 @@
 import { useState } from "react"
-import SignupCard from "./SignupCard"
+import SignupPage from "../pages/SignupPage.jsx"
 export default function LoginCard(){
     const [isLogin, setIsLogin] = useState(true);
     return(
@@ -43,7 +43,7 @@ export default function LoginCard(){
                         Not Registered?Click here</a>
                 </p>
             </div>:
-                <SignupCard/>
+                <SignupPage/>
         }
         </>
     );

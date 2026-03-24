@@ -1,24 +1,31 @@
-import React from 'react'
-import heroImg from '../assets/hero.jpg'
+import hero1 from "../assets/hero1.png";
 
-export default function Hero(){
-  return (
-    <section className='bg-cover bg-center' style={{backgroundImage:`url(${heroImg})`}}>
-      <div className='bg-black/30'>
-        <div className='max-w-6xl mx-auto px-6 py-24 flex items-center gap-8'>
-          <div className='text-white max-w-2xl'>
-            <h1 className='text-4xl md:text-5xl font-bold'>LIFE LINE: Bridging the Gap in Blood Management</h1>
-            <p className='mt-4 text-gray-200'>Smart scheduling, real-time tracking and emergency alerts to connect donors and hospitals faster.</p>
-            <div className='mt-6 flex gap-3'>
-              <button className='bg-white text-gray-900 px-4 py-2 rounded'>Learn More</button>
-              <button className='border border-white text-white px-4 py-2 rounded'>See it in Action</button>
+function Hero(){
+    return(
+        <div className="relative h-[90vh] w-screen flex items center mt-0 overflow-hidden">
+            <div
+             className="absolute inset-0 bg-cover bg-center"
+             style={{ backgroundImage: `url(${hero1})`}}
+            ></div>
+            <div className="absolute inset-0 bg-linear-to-r from-[#0A1A2F]/95 via-[#0A1A2F]/80 to-transparent"></div>
+            <div className="relative z-10 max-w-3xl px-12 py-20">
+                <h1 className="text-white text-5xl md:text-6xl font-extrabold leading-tight">
+                    RED PULSE: Bridging the gap <br/> in Blood Management
+                </h1>
+                <p className="text-gray-200 text-lg mt-6 max-w-md text-center font-bold">
+                    A comprehesive platform for a healthier tommorow
+                </p>
+                <div className="flex gap-4 mt-8">
+                    <button className="bg-white text-[#0A1A2F] font-semibold px-6 py-3 rounded-md hover:bg-gray-200 transition">
+                        Learn More
+                    </button>
+                    <button className="border border-white text-white font-semibold px-6 py-3 rounded-md hover:bg-white hover:text-[#0A1A2F] transition">
+                        Set in Action
+                    </button>
+                </div>
             </div>
-          </div>
-          <div className='hidden md:block flex-1'>
-            {/* decorative right column — image already used as background */}
-          </div>
         </div>
-      </div>
-    </section>
-  )
+    );
 }
+
+export default Hero
