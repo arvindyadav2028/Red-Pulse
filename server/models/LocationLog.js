@@ -6,7 +6,9 @@ const logSchema = new mongoose.Schema({
         minlength: 10,
         maxlength: 14,
         required: true,
-        unique: true
+        unique: true,
+         trim:      true,
+    match:     [/^[A-Z0-9\-]+$/, "Invalid location ID format"],
     },
     placeName: {
         type: String,
@@ -15,21 +17,21 @@ const logSchema = new mongoose.Schema({
     },
     empId: {
         type: mongoose.Schema.Types.ObjectId,
+        ref: "EmployeeDetail",
         required: true
     },
-    location: { 
-        address: { type: String, maxlength: 150 },
-        cityOrVillage: { type: String, maxlength: 50 },
-        district: { type: String, maxlength: 50 },
-        state: { type: String, maxlength: 50 },
+    address:       { type: String, maxlength: 150, required: true, trim: true },
+    cityOrVillage: { type: String, maxlength: 50,  required: true, trim: true },
+    district:      { type: String, maxlength: 50,  required: true, trim: true },
+    state:         { type: String, maxlength: 50,  required: true, trim: true },
+
+    geoLocation: {
+        type: { type: String, enum: ["Point"], default: "Point" },
+        coordinates: { type: [Number], default: undefined }, // [longitude, latitude]
     },
-    time: {
-        type: Date,
-        default: Date.now
-    },
-    date: {
-        type: Date,
-        default: Date.now
+    eventDate: {
+        type: Date, 
+        required: true
     },
     amount: {
         type: Number,
@@ -37,15 +39,32 @@ const logSchema = new mongoose.Schema({
     },
     typeOfLocation: {
         type: String,
-        maxlength: 50,
+        enum: ["Permanent", "Mobile Camp", "Outreach Drive", "Emergency"],
+        required: true,
     },
     nearbyLandmarks: {
         type: String,
         maxlength: 100,
     },
-    coordinates: {
-        latitude: { type: Number, required: true },
-        longitude: { type: Number, required: true }
+    
+    totalDonors:     { 
+        type: Number,
+         min: 0, 
+         default: 0 
+        },
+     
+    totalUnitsCollected: {
+        type: Number,
+        min: 0, 
+        default: 0 
+    },
+    hostedBy:   { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: "Hospital" 
+    },
+    hostedByBank: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "BloodBank" 
     },
     status: {
         type: String,
@@ -53,7 +72,18 @@ const logSchema = new mongoose.Schema({
         default: "Recorded"
     }
 
+},{timestamps:true});
+logSchema.index({ geoLocation: "2dsphere" });
+
+logSchema.pre("save", function(next) {
+    if (!this.hostedBy && !this.hostedByBank) {
+        return next(new Error("Either hostedBy or hostedByBank is required"));
+    }
+    next();
 });
+
+logSchema.index({ hostedBy: 1, eventDate: -1 });     
+logSchema.index({ typeOfLocation: 1, status: 1 });
 
 const LocationLog = mongoose.model("LocationLog", logSchema);
 module.exports = LocationLog;

@@ -1,37 +1,45 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const surplusDefinitionSchema = new mongoose.Schema({
-    _id : {
-        type : String,
-    },
-    status: {
-        type: String,
-        required: true,       // ✅ Surplus / ⚠️ Moderate / ❌ Low
-    },
-    label: {
-        type: String,
-        required: true        // Green, Yellow, Red
-    },
-    stockLevelDefinition: { 
-        type: String,
-        required: true  
-    },
-    colorCode: {
-        type: String,
-        enum: ["Green", "Yellow", "Red"],
-        required: true
-    },
-    recommendedAction: { // kept same
-        type: String,
-        required: true
-    },
+  status: {
+    type: String,
+    enum: ["Surplus", "Moderate", "Low"],
+    required: true,
+    unique: true,
+  },
+  minUnits: {
+    type: Number,
+    min: 0,
+    required: true,
+  },
+  maxUnits: {
+    type: Number,
+    min: 0,
+  },
+  
+  colorCode: {
+    type: String,
+    enum: ["Green", "Yellow", "Red"],
+    required: true,
+  },
+  recommendedAction: {
+    // kept same
+    type: String,
+    required: true,
+  },
 
-    thresholdValue: {
-        type: Number,
-        min: 0,
-        default: 100  // percentage baseline
-    },
-});
+ bloodGroupThresholds: [{
+    bloodGroup:   { type: String, enum: ["A+","A-","B+","B-","AB+","AB-","O+","O-"], required: true },
+    lowBelow:     { type: Number, min: 0, required: true },
+    surplusAbove: { type: Number, min: 0, required: true },
+}],
+},{timestamps:true});
 
-const SurplusDefinition = mongoose.model("SurplusDefinition", surplusDefinitionSchema);
+surplusDefinitionSchema.index({ status: 1 });     // ← quick status lookup
+surplusDefinitionSchema.index({ colorCode: 1 });
+
+const SurplusDefinition = mongoose.model(
+  "SurplusDefinition",
+  surplusDefinitionSchema,
+);
 module.exports = SurplusDefinition;

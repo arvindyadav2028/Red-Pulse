@@ -6,27 +6,28 @@ const AlertLog = require("../models/AlertLog.js");
 const BloodBankInventory = require("../models/BloodBankInventory.js");
 const BloodBank = require("../models/BloodBank.js");
 const CommunityEngagement = require("../models/CommunityEngagement.js");
+const CommunityEvent = require("../models/CommunityEvent.js");
 const DonorLog = require("../models/DonorLog.js");
 const Donor = require("../models/Donor.js");
 const EmployeeDetails = require("../models/EmployeeDetails.js");
 const HospitalInventory = require("../models/HospitalInventory.js");
 const Hospital = require("../models/Hospital.js");
-const LifeSaved = require("../models/LifeSaved.js");
+const LifeSave = require("../models/LifeSave.js");
 const LocationLog = require("../models/LocationLog.js");
 const RequestLog = require("../models/RequestLog.js");
 const StandardDefinition = require("../models/StandardDefinition.js");
 const SurplusDefinition = require("../models/SurplusDefinition.js");
 
-main()
-.then(()=>{
-    console.log("connection succesfull");
-}).catch((err)=>{
-    console.log(err);
-});
-
-async function main(){
-    await mongoose.connect("mongodb://127.0.0.1:27017/LifeLine");
+async function main() {
+    try {
+        await mongoose.connect("mongodb://127.0.0.1:27017/LifeLine");
+        console.log("Connection successful");
+    } catch (err) {
+        console.log("Connection error:", err);
+    }
 }
+
+main();
 
 async function initDB() {
   try {
@@ -38,12 +39,13 @@ async function initDB() {
       BloodBankInventory.deleteMany({}),
       BloodBank.deleteMany({}),
       CommunityEngagement.deleteMany({}),
+      CommunityEvent.deleteMany({}),
       DonorLog.deleteMany({}),
       Donor.deleteMany({}),
       EmployeeDetails.deleteMany({}),
       HospitalInventory.deleteMany({}),
       Hospital.deleteMany({}),
-      LifeSaved.deleteMany({}),
+      LifeSave.deleteMany({}),
       LocationLog.deleteMany({}),
       RequestLog.deleteMany({}),
       StandardDefinition.deleteMany({}),
@@ -61,7 +63,7 @@ async function initDB() {
       EmployeeDetails.insertMany(initData.employeeDetail),
       HospitalInventory.insertMany(initData.hospitalInventory),
       Hospital.insertMany(initData.hospital),
-      LifeSaved.insertMany(initData.lifeSaved),
+      LifeSave.insertMany(initData.lifeSaved),
       LocationLog.insertMany(initData.locationLog),
       RequestLog.insertMany(initData.requestLog),
       StandardDefinition.insertMany(initData.standardDefinition),
@@ -69,7 +71,8 @@ async function initDB() {
     ]);
 
     console.log("Database successfully inserted");
-  } catch (error) {
+  } 
+  catch (error) {
     console.error("Error during initialization:", error);
   } 
   finally {

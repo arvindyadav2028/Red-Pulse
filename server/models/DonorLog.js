@@ -1,23 +1,53 @@
 const mongoose = require("mongoose");
 
 const logSchema = new mongoose.Schema({
-    donarId: {
+    donorId: {
         type: mongoose.Schema.Types.ObjectId,
+        ref: "Donor",
         required: true,
     },
-    lastDonation: {
+    bloodBankId: {
+         type: mongoose.Schema.Types.ObjectId,
+          ref: "BloodBank", 
+          required: true
+         }, 
+
+    productId: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: "BloodBankInventory" 
+    },
+    DonoationDate: {
         type: Date,
         required: true
     },
-    lastDonationQuantity: {
+    Quantity: {
         type: Number,
-        min: 0,
+        min: 1,
         required: true
     },
+    unitType:      {
+         type: String, 
+         enum: ["ml", "units", "bags"],
+          default: "units"
+         },
+
+         bloodGroup: {
+    type:     String,
+    enum:     ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
+    required: true,
+    },
+
+    component: {
+    type:     String,
+    enum:     ["Whole Blood", "Plasma", "Platelets", "RBC", "WBC", "Cryoprecipitate"],
+    required: true,
+    },
+
     totalDonation: {
         type: Number,
         default: 0,
     },
+
     nextEligibleDate: {
         type: Date,
         required: true
@@ -27,13 +57,18 @@ const logSchema = new mongoose.Schema({
         maxlength: 100,
         required: true,
     },
-    location: {
-        latitude: { type: Number },
-        longitude: { type: Number },
+     location: {
+    type: {
+        type:    String,
+        enum:    ["Point"],
+        default: "Point",
     },
-    empId: {
-        type: mongoose.Schema.Types.ObjectId,
+    coordinates: {
+        type:    [Number],
+        default: undefined,
     },
+},
+   
     lifeSaved: {
         type: Number,
         default: 0,
@@ -42,16 +77,26 @@ const logSchema = new mongoose.Schema({
         type: String,
         maxlength: 150
     },
-    verifiedBy: {   //Employye Id Who takes the blood
+    processedBy: {   //Employye Id Who takes the blood
         type: mongoose.Schema.Types.ObjectId,
+        ref: "EmployeeDetail",
+        required:true
     },
     status: {
         type: String,
-        enum: ["Recorded", "Verified", "Rejected"],
+       enum: ["Pending", "Approved", "Completed", "Rejected"],
         default: "Recorded"
     }
 
-});
+}, { timestamps: true });
+
+logSchema.index({ donorId: 1, donationDate: -1 }); // ← donor history
+logSchema.index({ bloodBankId: 1, donationDate: -1 });
+
+logSchema.index({ location: "2dsphere" });
 
 const DonorLog = mongoose.model("DonorLog", logSchema);
 module.exports = DonorLog;
+
+
+//Indexes are used to speed up queries. Without them MongoDB scans every document in a collection to find matches — called a collection scan.

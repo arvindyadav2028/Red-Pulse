@@ -1,16 +1,27 @@
 const mongoose = require("mongoose");
+const bcrypt=require("bcryptjs")
 
 const employeeSchema = new mongoose.Schema({
     empId: {
-        type: String,
-        maxlength: 30,
+       type:String, 
+        minlength: 4,
+        maxlength: 30, 
+        match: [/^[A-Z0-9\-]+$/, "Invalid employee ID format"],
+        required: true, 
+        unique: true,
+        uppercase: true,
+        trim:  true,
+    },
+    hospitalId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Hospital",
         required: true,
-        unique: true
     },
     name: {
         type: String,
         maxlength: 50,
         required: true,
+        trim:true
     },
     age: {
         type: Number,
@@ -32,20 +43,32 @@ const employeeSchema = new mongoose.Schema({
         type: String,
         maxlength: 15,
     },
+
+    //AUTH
     email: {
         type: String,
         maxlength: 100,
         required: true,
+        unique:true,
+        lowercase:true,
+        match:[/^\S+@\S+\.\S+$/, "Invalid email format"],
+    },
+    password:{
+        type:String,
+        minlength:8,
+        required:true,
     },
     workLocation: {
         type: String,
         maxlength: 100,
         required: true,
+        trim:true
     },
     designation: {
         type: String,
         maxlength: 50,
         required: true,
+        trim:true
     },
     image: {
         type: String,
@@ -68,9 +91,19 @@ const employeeSchema = new mongoose.Schema({
     },
     joinedOn: {
         type: Date,
-        default: Date.now
+
     },
-});
+},{timestamps:true});
+
+employeeSchema.pre("save", async function (next) {
+    if (!this.isModified("password")) return next();
+    this.password = await bcrypt.hash(this.password, 10);
+    next();
+})
+
+employeeSchema.methods.matchPassword = async function (candidatePassword) {
+    return bcrypt.compare(candidatePassword, this.password);
+};
 
 const EmployeeDetail = mongoose.model("EmployeeDetail", employeeSchema);
 module.exports = EmployeeDetail;

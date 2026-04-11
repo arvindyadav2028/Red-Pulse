@@ -1,59 +1,58 @@
 const mongoose = require("mongoose");
+const CommunityEngagement = new mongoose.Schema(
+  {
+    circleName: {
+      type: String,
+      required: true,
+      minlength: 3,
+      maxlength: 100,
+      trim: true,
+    },
+    circleType: {
+      type: String,
+      enum: ["College", "Workplace", "Local Club", "NGO", "Other"],
+      required: true,
+    },
+    description: {
+      type: String,
+      maxlength: 500,
+    },
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Donor",
+      required: true,
+    },
+    status: {
+      type: String,
+      enum: ["Active", "Inactive", "Disbanded"],
+      default: "Active",
+    },
+    city: { type: String, maxlength: 50, trim: true },
+    district: { type: String, maxlength: 50, trim: true },
+    state: { type: String, maxlength: 50, trim: true },
+    members: [
+      {
+        donorId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Donor",
+          required: true,
+        },
+        joinedOn: { type: Date, default: Date.now },
+        role: { type: String, enum: ["Admin", "Member"], default: "Member" },
+      },
+    ],
+    totalDonations: { type: Number, default: 0, min: 0 },
+    totalUnitsGiven: { type: Number, default: 0, min: 0 },
+    lifeSaved: { type: Number, default: 0, min: 0 }, // totalUnitsGiven * 3
+    leaderboardRank: { type: Number, default: 0, min: 0 },
+  },
+  { timestamps: true },
+);
 
-const communitySchema = new mongoose.Schema({
-    date: { 
-        type: Date,
-        required: true,
-        default: Date.now
-    },
-    event: { 
-        type: String,
-        maxlength: 100,
-        required: true
-    },
-    location: { 
-        type: String,
-        maxlength: 150,
-        required: true
-    },
-    targetGroup: {
-        type: String,
-        maxlength: 100,
-        required: true
-    },
-    partner: { 
-        type: String,
-        maxlength: 100
-    },
-    attendees: {
-        type: Number,
-        min: 0,
-        default: 0
-    },
-    bloodUnit: {
-        type: Number,
-        min: 0,
-        default: 0
-    },
-    feedback: { 
-        type: String,
-        maxlength: 300
-    },
-    followUpAction: {
-        type: String,
-        maxlength: 300
-    },
-    status: { 
-        type: String,
-        enum: ["Planned", "Ongoing", "Completed", "Cancelled"],
-        default: "Planned"
-    },
-    sponsors: [{
-        name: String,
-        contributionType: String,
-        amount: Number
-    }],
-});
+CommunityEngagement.path("members").validate(function (members) {
+  const ids = members.map((m) => m.donorId.toString());
+  return ids.length === new Set(ids).size;
+}, "A donor can only join a circle once");
 
-const CommunityEngagement = mongoose.model("CommunityEngagement", communitySchema);
-module.exports = CommunityEngagement;
+const Circle = mongoose.model("CommunityEngagement", CommunityEngagement);
+module.exports = Circle;
