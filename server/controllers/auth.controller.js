@@ -314,9 +314,9 @@
 
 
 
-import userModel from "../models/user.model.js";
-import sessionModel from "../models/session.model.js";
-import otpModel from "../models/otp.model.js";
+import userModel from "../models/User.js";
+import sessionModel from "../models/Session.js";
+import otpModel from "../models/Otp.js";
 
 import crypto from "crypto";
 import bcrypt from "bcryptjs";
@@ -379,6 +379,7 @@ export const register = async (req, res) => {
         _id: user._id,
         username: user.username,
         email: user.email,
+        role:user.role,
         verified: user.verified,
         createdAt: user.createdAt,
       },
@@ -443,6 +444,7 @@ export const login = async (req, res) => {
     const accessToken = jwt.sign(
       {
         id: user._id,
+        role: user.role,
         sessionId: session._id,
       },
       config.JWT_SECRET,
@@ -474,35 +476,42 @@ export const login = async (req, res) => {
   }
 };
 
-/* =================================
-   GET ME
-================================= */
-export const getMe = async (req, res) => {
-  try {
-    const token =
-      req.headers.authorization?.split(" ")[1];
 
-    if (!token) {
-      return res.status(401).json({
-        message: "Token not found",
+/* =================================
+   VERIFY EMAIL
+================================= */
+export const verifyEmail = async (req, res) => {
+  try {
+    const { otp, email } = req.body;
+
+    const otpHash = crypto
+      .createHash("sha256")
+      .update(otp)
+      .digest("hex");
+
+    const otpDoc = await otpModel.findOne({
+      email,
+      otpHash,
+    });
+
+    if (!otpDoc) {
+      return res.status(400).json({
+        message: "Invalid OTP",
       });
     }
 
-    const decode = jwt.verify(
-      token,
-      config.JWT_SECRET
+    const user = await userModel.findByIdAndUpdate(
+      otpDoc.user,
+      { verified: true },
+      { new: true }
     );
 
-    const user = await userModel.findById(decode.id);
-
-    if (!user) {
-      return res.status(404).json({
-        message: "User not found",
-      });
-    }
+    await otpModel.deleteMany({
+      user: otpDoc.user,
+    });
 
     return res.status(200).json({
-      message: "User fetched successfully",
+      message: "Email verified successfully",
       user: {
         _id: user._id,
         username: user.username,
@@ -517,6 +526,7 @@ export const getMe = async (req, res) => {
     });
   }
 };
+
 
 /* =================================
    REFRESH TOKEN
@@ -593,6 +603,34 @@ export const refreshToken = async (req, res) => {
   }
 };
 
+
+/* =================================
+   GET ME
+================================= */
+export const getMe = async (req, res) => {
+  try {
+    // We get the user directly from the request object 
+    // because the 'authenticate' middleware already found them for us.
+    // and attached fetched user to req.user=user
+    const user = req.user;
+    return res.status(200).json({
+        message: "User fetched successfully",
+        user: {
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        verified: user.verified,
+        createdAt: user.createdAt,
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+
 /* =================================
    LOGOUT
 ================================= */
@@ -600,32 +638,43 @@ export const logout = async (req, res) => {
   try {
     const token = req.cookies.refreshToken;
 
+    // 1. Check if the refresh token exists in the browser cookies
     if (!token) {
       return res.status(400).json({
         message: "Refresh token not found",
       });
     }
 
+    // 2. Hash the incoming cookie token to compare with the DB hash
     const refreshTokenHash = crypto
       .createHash("sha256")
       .update(token)
       .digest("hex");
 
+    // 3. Find the session that is both active (not revoked) and belongs to THIS user
+    // req.user._id comes from your 'authenticate' middleware
     const session = await sessionModel.findOne({
+      user: req.user._id, 
       refreshTokenHash,
       revoked: false,
     });
 
     if (!session) {
       return res.status(400).json({
-        message: "Invalid refresh token",
+        message: "Invalid session or already logged out",
       });
     }
 
+    // 4. Revoke the session so the refresh token can never be used again
     session.revoked = true;
     await session.save();
 
-    res.clearCookie("refreshToken");
+    // 5. Clear the cookie from the user's browser
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+    });
 
     return res.status(200).json({
       message: "Logged out successfully",
@@ -636,6 +685,7 @@ export const logout = async (req, res) => {
     });
   }
 };
+
 
 /* =================================
    LOGOUT ALL
@@ -669,56 +719,6 @@ export const logoutAll = async (req, res) => {
 
     return res.status(200).json({
       message: "Logged out from all devices successfully",
-    });
-  } catch (error) {
-    return res.status(500).json({
-      message: error.message,
-    });
-  }
-};
-
-/* =================================
-   VERIFY EMAIL
-================================= */
-export const verifyEmail = async (req, res) => {
-  try {
-    const { otp, email } = req.body;
-
-    const otpHash = crypto
-      .createHash("sha256")
-      .update(otp)
-      .digest("hex");
-
-    const otpDoc = await otpModel.findOne({
-      email,
-      otpHash,
-    });
-
-    if (!otpDoc) {
-      return res.status(400).json({
-        message: "Invalid OTP",
-      });
-    }
-
-    const user = await userModel.findByIdAndUpdate(
-      otpDoc.user,
-      { verified: true },
-      { new: true }
-    );
-
-    await otpModel.deleteMany({
-      user: otpDoc.user,
-    });
-
-    return res.status(200).json({
-      message: "Email verified successfully",
-      user: {
-        _id: user._id,
-        username: user.username,
-        email: user.email,
-        verified: user.verified,
-        createdAt: user.createdAt,
-      },
     });
   } catch (error) {
     return res.status(500).json({
