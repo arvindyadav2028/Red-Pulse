@@ -1,34 +1,22 @@
-if (!process.env.MONGO_URI) {
-    throw new Error("MONGO_URI is not defined in environment variables");
-}
-
-if (!process.env.JWT_SECRET) {
-    throw new Error("JWT_SECRET is not defined in environment variables");
-}
-
-if (!process.env.GOOGLE_CLIENT_ID) {
-    throw new Error("GOOGLE_CLIENT_ID is not defined in environment variables");
-}
-
-if (!process.env.GOOGLE_CLIENT_SECRET) {
-    throw new Error("GOOGLE_CLIENT_SECRET is not defined in environment variables");
-}
-
-if (!process.env.GOOGLE_REFRESH_TOKEN) {
-    throw new Error("GOOGLE_REFRESH_TOKEN is not defined in environment variables");
-}
-
-if (!process.env.GOOGLE_USER) {
-    throw new Error("GOOGLE_USER is not defined in environment variables");
+// Fail fast — crash at startup if required env vars are missing
+const required = ["MONGO_URI", "JWT_SECRET"];
+for (const key of required) {
+    if (!process.env[key]) {
+        throw new Error(`Missing required environment variable: ${key}`);
+    }
 }
 
 const config = {
-    MONGO_URI: process.env.MONGO_URI,
-    JWT_SECRET: process.env.JWT_SECRET,
-    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
-    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
-    GOOGLE_REFRESH_TOKEN: process.env.GOOGLE_REFRESH_TOKEN,
-    GOOGLE_USER: process.env.GOOGLE_USER
-}
+    PORT:                   process.env.PORT || 3000,
+    NODE_ENV:               process.env.NODE_ENV || "development",
+    MONGO_URI:              process.env.MONGO_URI,
+    JWT_SECRET:             process.env.JWT_SECRET,
+    CLIENT_ORIGIN:          process.env.CLIENT_ORIGIN || "http://localhost:5173",
+    // Email — optional; gracefully disabled if not provided
+    GOOGLE_CLIENT_ID:       process.env.GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET:   process.env.GOOGLE_CLIENT_SECRET,
+    GOOGLE_REFRESH_TOKEN:   process.env.GOOGLE_REFRESH_TOKEN,
+    GOOGLE_USER:            process.env.GOOGLE_USER,
+};
 
 export default config;

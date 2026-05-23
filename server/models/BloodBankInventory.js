@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const bloodBankInventorySchema = new mongoose.Schema({
     productId: {
@@ -79,4 +79,4 @@ bloodBankInventorySchema.pre("save", function (next) {
 });
 
 const BloodBankInventory = mongoose.model("BloodBankInventory", bloodBankInventorySchema);
-module.exports = BloodBankInventory;
+export default BloodBankInventory;

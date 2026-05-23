@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const standardSchema = new mongoose.Schema({
   minAge: {
@@ -79,4 +79,4 @@ const standardSchema = new mongoose.Schema({
 standardSchema.index({ isActive: 1 }, { unique: true, sparse: true });
 
 const StandardDefinition = mongoose.model("StandardDefinition", standardSchema);
-module.exports = StandardDefinition;
+export default StandardDefinition;

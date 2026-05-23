@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const logSchema = new mongoose.Schema({
     locationId: {
@@ -86,4 +86,4 @@ logSchema.index({ hostedBy: 1, eventDate: -1 });
 logSchema.index({ typeOfLocation: 1, status: 1 });
 
 const LocationLog = mongoose.model("LocationLog", logSchema);
-module.exports = LocationLog;
+export default LocationLog;

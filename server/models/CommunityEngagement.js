@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const CommunityEngagement = new mongoose.Schema(
   {
     circleName: {
@@ -55,4 +55,4 @@ CommunityEngagement.path("members").validate(function (members) {
 }, "A donor can only join a circle once");
 
 const Circle = mongoose.model("CommunityEngagement", CommunityEngagement);
-module.exports = Circle;
+export default Circle;

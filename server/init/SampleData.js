@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const oid = () => new mongoose.Types.ObjectId();
 const bloodGroups = ["A+","A-","B+","B-","AB+","AB-","O+","O-"];
@@ -148,7 +148,7 @@ const surplusDefinition = Array.from({ length: 20 }, (_, i) => ({
 }));
 
 // ---------- EXPORT ----------
-module.exports = {
+export default {
   alertLog,
   bloodbankInventory,
   bloodBank,

@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const requestSchema = new mongoose.Schema({
     
@@ -98,4 +98,4 @@ const requestSchema = new mongoose.Schema({
 
 requestSchema.index({ location: "2dsphere" });
 const RequestLog = mongoose.model("RequestLog", requestSchema);
-module.exports = RequestLog;
+export default RequestLog;

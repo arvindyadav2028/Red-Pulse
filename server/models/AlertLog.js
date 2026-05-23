@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const alertSchema = new mongoose.Schema({
     requesterName: { 
@@ -96,4 +96,4 @@ alertSchema.index({ expiresAt: 1 });                           // ← for auto-e
 alertSchema.index({ triggeredBy: 1, status: 1 }); 
 
 const AlertLog = mongoose.model("AlertLog", alertSchema);
-module.exports = AlertLog;
+export default AlertLog;

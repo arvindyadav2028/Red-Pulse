@@ -1,4 +1,4 @@
-const nodemailer=require("nodemailer")
+import nodemailer from 'nodemailer'
 const sendEmail= async(to, subject, message)=>{
     try{
 const transporter=nodemailer.createTransport({
@@ -28,4 +28,4 @@ const transporter=nodemailer.createTransport({
 
 
 
-module.exports=sendEmail;
+export { sendEmail };

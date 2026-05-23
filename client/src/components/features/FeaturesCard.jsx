@@ -7,7 +7,7 @@ import logo3 from "../../assets/logo3.png"
 library.add(fas, far);
 function FeaturesCard(){
     return(
-        <nav className='h-16 bg-[rgb(10,26,47)] w-screen text-gray-50 pl-12 pr-4 flex mb-4 items-center justify-between shadow-lg border-b border-white/10 mt-0'>
+        <nav className='h-16 bg-[rgb(10,26,47)] w-full text-gray-50 pl-12 pr-4 flex mb-4 items-center justify-between shadow-lg border-b border-white/10 mt-0'>
             <div className='text-2xl font-bold flex items-center gap-2'>
                 <span>
                     <image src={logo3} alt="RedPulse logo" className="h-8 w-auto opacity-90"/>

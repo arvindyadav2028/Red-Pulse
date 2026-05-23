@@ -5,7 +5,7 @@ import { far } from "@fortawesome/free-regular-svg-icons";
 import logo3 from "../assets/logo3.png"
 function UserNav() {
   return (
-    <nav className='h-16 bg-[#0A1A2F] w-screen text-gray-50 pl-12 pr-4 flex mb-4 items-center justify-between shadow-lg border-b border-white/10 mt-0'>
+    <nav className='h-16 bg-[#0A1A2F] w-full text-gray-50 pl-12 pr-4 flex mb-4 items-center justify-between shadow-lg border-b border-white/10 mt-0'>
       <div className='text-2xl font-bold flex items-center gap-2'>
         <span>
              <img src={logo3} alt="Lifeline logo" className="h-8 w-auto opacity-90" />           

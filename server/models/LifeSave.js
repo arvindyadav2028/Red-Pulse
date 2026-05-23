@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const lifesaveSchema = new mongoose.Schema({
     donorId: {
@@ -55,4 +55,4 @@ lifesaveSchema.index({ bloodGroup: 1, lifeSaved: -1 }); // ← leaderboard
 lifesaveSchema.index({ totalDonationCount: -1 });        // ← top donors
 
 const LifeSave = mongoose.model("LifeSave", lifesaveSchema);
-module.exports = LifeSave;
+export default LifeSave;

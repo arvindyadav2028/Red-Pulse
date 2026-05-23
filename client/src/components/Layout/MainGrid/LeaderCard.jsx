@@ -2,7 +2,7 @@ import React from 'react'
 import {Crown} from 'lucide-react'
 const LeaderCard = () => {
   return (
-    <div className="flex items-center justify-center bg-linear-to-br from-cyan-100 via-sky-200 to-cyan-100 p-4 h-[550px] w-[300px] ml-4 mr-10 mt-25 rounded-2xl">
+    <div className="flex items-center justify-center bg-gradient-to-br from-cyan-100 via-sky-200 to-cyan-100 p-4 h-[550px] w-[300px] ml-4 mr-10 mt-25 rounded-2xl">
     <div
         className="
           w-[250px]
@@ -11,7 +11,7 @@ const LeaderCard = () => {
           rounded-3xl
           flex flex-col
           backdrop-blur-2xl
-          bg-linear-to-br from-sky-100/50 to-sky-50/30
+          bg-gradient-to-br from-sky-100/50 to-sky-50/30
           border border-white/50
           shadow-xl shadow-sky-200/30
         "

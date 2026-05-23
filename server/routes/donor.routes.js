@@ -1,5 +1,5 @@
-import express from "express";
-const router = express.Router();
+import { Router } from "express";
+const router = Router();
 
 import Donor from "../models/Donor.js";
 import verifyToken from "../middleware/verifyToken.js";
@@ -104,4 +104,4 @@ router.delete(
   })
 );
 
-module.exports = router;
+export default router;

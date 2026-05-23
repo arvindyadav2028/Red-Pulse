@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const hospitalInventorySchema = new mongoose.Schema({
     productId: {
@@ -79,4 +79,4 @@ hospitalInventorySchema.pre("save", function (next) {
 });
 
 const HospitalInventory = mongoose.model("HospitalInventory", hospitalInventorySchema);
-module.exports = HospitalInventory;
+export default HospitalInventory;

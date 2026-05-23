@@ -1,172 +1,49 @@
-const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
+import mongoose from "mongoose";
 
 const hospitalSchema = new mongoose.Schema({
-    hospitalID: {         
-        type: String,
-        minlength: 6,
-        maxlength: 14,
-        required: true,
-        unique: true
-    },
-    name: {               
-        type: String,
-        minlength: 3,
-        maxlength: 50,
-        required: true,
-    },
-    hospitalHeadID: {     
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Employee",
+        ref: "user",
         required: true,
+        unique: true,
     },
-    type: {              
-        type: String,
-        enum: ["General", "Multi-specialty", "Super-specialty", "Clinic"],
-       // required: true
-    },
-    ownership: {         
-        type: String,
-        maxlength: 50,
-       // required: true,
-    },
-    licence: {            
-        type: String,
-        maxlength: 50,
-        required: true
-    },
-    accreditation: {     
-        type: String,
-        maxlength: 50,
-    },
-    accCertificates: {     
-        type: [String],
-    },
-    emgServices: {       
-        type: String,
-        maxlength: 150,
-    },
-    //AUTH
-    email:{
-        type:String,
-        required:true,
-        minlength:5,
-        unique:true,
-        lowercase:true,
-        trim:true,
-        match:[/^\S+@\S+\.\S+$/, "Invalid email format"],
-    },
-    password:{
-        type:String,
-        minlength:6,
-        required:true
-    },
+    hospitalID:     { type: String, minlength: 3, maxlength: 14, trim: true },
+    name:           { type: String, minlength: 3, maxlength: 50, required: [true, "Hospital name is required"] },
+    hospitalHeadID: { type: mongoose.Schema.Types.ObjectId, ref: "EmployeeDetail" },
+    type:           { type: String, enum: ["General","Multi Speciality","Super-specialty","Emergency","Trauma Center","Clinic"] },
+    ownership:      { type: String, maxlength: 50 },
+    licence:        { type: String, maxlength: 50 },
+    accreditation:  { type: String, maxlength: 50 },
+    emgServices:    { type: String, maxlength: 150 },
 
-    //Address
-    address: {
-        type: String,
-        maxlength: 150,
-        required: true,
-    },
-    landmark: {
-        type: String,
-        maxlength: 50,
-    },
-    cityOrVillage: {
-        type: String,
-        maxlength: 50,
-        required: true,
-    },
-    pincode: {
-        type: String,
-        minlength: 6,
-        maxlength: 6,
-        required: true,
-        match: [/^\d{6}$/, "Pincode must be 6 digits"],
-    },
-    district: {
-        type: String,
-        maxlength: 50,
-        required: true
-    },
-    state: {
-        type: String,
-        maxlength: 50,
-        required: true
-    },
+    address:       { type: String, maxlength: 150, required: [true, "Address is required"] },
+    landmark:      { type: String, maxlength: 50 },
+    cityOrVillage: { type: String, maxlength: 50,  required: [true, "City / Village is required"] },
+    pincode:       { type: String, minlength: 6, maxlength: 6, required: [true, "Pincode is required"], match: [/^\d{6}$/, "Pincode must be 6 digits"] },
+    district:      { type: String, maxlength: 50,  required: [true, "District is required"] },
+    state:         { type: String, maxlength: 50,  required: [true, "State is required"] },
+
     location: {
-      type: {
-        type:    String,
-        enum:    ["Point"],
-        default: "Point",
-      },
-      coordinates: {
-        type:    [Number], // [longitude, latitude]
-        default: undefined,
-      },
+        type: { type: String, enum: ["Point"], default: "Point" },
+        coordinates: { type: [Number], default: undefined },
     },
-    image: {
-        type: String,
-        required: true
-    },
-    status: { 
-        type: Number, 
-        enum: [0, 1, 2], 
-        default: 0 
-    }, // 0=Inactive, 1=Active, 2=Suspended
-    
-    // Contact info
-    phoneNo1: {
-        type: String,
-        maxlength: 15,
-        required: true,
-    },
-    phoneNo2: {
-        type: String,
-        maxlength: 15,
-    },
-  
-    totalEmp: {
-        type: Number,
-        max: 1000000,
-        min:0,
-    },
+
+    image:              { type: String },
+    licenceImage:       { type: String },
+    accreditationImage: { type: String },
+    status: { type: Number, enum: [0, 1, 2], default: 0 }, // 0=Pending, 1=Active, 2=Suspended
+    phoneNo1: { type: String, maxlength: 15, required: [true, "Contact number is required"] },
+    phoneNo2: { type: String, maxlength: 15 },
+    totalEmp: { type: Number, min: 0, max: 1000000 },
+
     reviews: [{
-        userId: { 
-            type: mongoose.Schema.Types.ObjectId,
-             ref: "User",
-             required:true, 
-            },
-        rating: { 
-            type: Number,
-             min: 1,
-             max: 5 ,
-             required:true,
-            },
-        comment: { 
-            type: String,
-            maxlength:500,
-            trim:true,
-        }
+        userId:  { type: mongoose.Schema.Types.ObjectId, ref: "user" },
+        rating:  { type: Number, min: 1, max: 5 },
+        comment: { type: String, maxlength: 500, trim: true },
     }],
+}, { timestamps: true });
 
-},{timestamps:true});
-
-hospitalSchema.pre("save",async function(next){
-    if(!this.isModified("password")) return next();
-    this.password=await bcrypt.hash(this.password, 10);
-    next();
-});
-
-
-// compare password
-hospitalSchema.methods.matchPassword = async function (enteredPassword) {
-    return await bcrypt.compare(enteredPassword, this.password);
-};
-
-
-// ── Geo index for location-based Hospital search ─────
-hospitalSchema.index({location:"2dsphere"});
+hospitalSchema.index({ location: "2dsphere" }, { sparse: true });
 
 const Hospital = mongoose.model("Hospital", hospitalSchema);
-module.exports = Hospital;
+export default Hospital;

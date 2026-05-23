@@ -1,22 +1,22 @@
-const mongoose= require("mongoose");
-const initData = require("./SampleData.js");
+import mongoose from "mongoose";
+import initData from "./SampleData.js";
 
 // Import all models
-const AlertLog = require("../models/AlertLog.js");
-const BloodBankInventory = require("../models/BloodBankInventory.js");
-const BloodBank = require("../models/BloodBank.js");
-const CommunityEngagement = require("../models/CommunityEngagement.js");
-const CommunityEvent = require("../models/CommunityEvent.js");
-const DonorLog = require("../models/DonorLog.js");
-const Donor = require("../models/Donor.js");
-const EmployeeDetails = require("../models/EmployeeDetails.js");
-const HospitalInventory = require("../models/HospitalInventory.js");
-const Hospital = require("../models/Hospital.js");
-const LifeSave = require("../models/LifeSave.js");
-const LocationLog = require("../models/LocationLog.js");
-const RequestLog = require("../models/RequestLog.js");
-const StandardDefinition = require("../models/StandardDefinition.js");
-const SurplusDefinition = require("../models/SurplusDefinition.js");
+import AlertLog from "../models/AlertLog.js";
+import BloodBankInventory from "../models/BloodBankInventory.js";
+import BloodBank from "../models/BloodBank.js";
+import CommunityEngagement from "../models/CommunityEngagement.js";
+import CommunityEvent from "../models/CommunityEvent.js";
+import DonorLog from "../models/DonorLog.js";
+import Donor from "../models/Donor.js";
+import EmployeeDetails from "../models/EmployeeDetails.js";
+import HospitalInventory from "../models/HospitalInventory.js";
+import Hospital from "../models/Hospital.js";
+import LifeSave from "../models/LifeSave.js";
+import LocationLog from "../models/LocationLog.js";
+import RequestLog from "../models/RequestLog.js";
+import StandardDefinition from "../models/StandardDefinition.js";
+import SurplusDefinition from "../models/SurplusDefinition.js";
 
 async function main() {
     try {

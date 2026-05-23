@@ -1,24 +1,22 @@
-import mongoose, { model } from "mongoose";
-
-
+import mongoose from "mongoose";
 
 const sessionSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "users",
-        required: [ true, "User is required" ]
+        ref: "user",   // matches mongoose.model("user", ...) in User.js
+        required: [true, "User is required"]
     },
     refreshTokenHash: {
         type: String,
-        required: [ true, "Refresh token hash is required" ]
+        required: [true, "Refresh token hash is required"]
     },
     ip: {
         type: String,
-        required: [ true, "IP address is required" ]
+        required: [true, "IP address is required"]
     },
     userAgent: {
         type: String,
-        required: [ true, "User agent is required" ]
+        required: [true, "User agent is required"]
     },
     revoked: {
         type: Boolean,
@@ -26,9 +24,8 @@ const sessionSchema = new mongoose.Schema({
     }
 }, {
     timestamps: true
-})
+});
 
-const sessionModel = mongoose.model("sessions", sessionSchema)
+const sessionModel = mongoose.model("sessions", sessionSchema);
 
-
-export default sessionModel
+export default sessionModel;

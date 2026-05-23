@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const communitySchema = new mongoose.Schema(
   {
@@ -85,4 +85,4 @@ const CommunityEvent = mongoose.model(
   "CommunityEvent",
   communitySchema,
 );
-module.exports = CommunityEvent;
+export default CommunityEvent;

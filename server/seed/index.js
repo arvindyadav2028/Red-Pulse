@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const Hospital = require("../models/Hospital.js");
+import mongoose from "mongoose";
+import Hospital from "../models/Hospital.js";
 
 main();
 

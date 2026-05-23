@@ -1,30 +1,39 @@
-import logo3 from "../assets/logo3.png"
-import { useNavigate } from "react-router-dom"
+import logo3 from "../assets/logo3.png";
+import { useNavigate } from "react-router-dom";
 
-function Navbar(){
+export default function Navbar() {
     const navigate = useNavigate();
-    return(
-        <nav className="pt-4 bg-[#0A1A2F] w-screen text-white px-12 py-4 flex mb-2 items-center justify-between shadow-lg border-b border-white/10 mt-0">
-            <div className="text-2xl font-bold flex items-center gap-2">
-                <span>
-                    <img src={logo3} alt="RedPulse Logo" className="h-15 w-20 opacity-90"/>
-                </span>
-                <h5>RED PULSE</h5>
-            </div>
-            <ul className="hidden md:flex gap-10 pt-4 text-lg tracking-wide">
-                <li className="cursor-pointer hover:text-gray-300">Features</li>
-                <li className="cursor-pointer hover:text-gray-300">Impact</li>
-                <li className="cursor-pointer hover:text-gray-300">Community</li>
-                <li className="cursor-pointer hover:text-gray-300">Resources</li>
-            </ul>
+    return (
+        <nav className="bg-[#0A1A2F] w-full text-white px-8 md:px-12 py-4 flex items-center justify-between shadow-lg border-b border-white/10">
             <button
-             onClick={()=> navigate("./login")}
-             className="bg-yellow-600 px-4 py-2 rounded-md text-black font-semibold cursor-pointer"
+                onClick={() => navigate("/")}
+                className="text-2xl font-bold flex items-center gap-2 hover:opacity-80 transition-opacity"
             >
-                Login/Sign up
+                <img src={logo3} alt="RedPulse Logo" className="h-10 w-14 opacity-90 object-contain" />
+                <span className="tracking-wider">RED PULSE</span>
             </button>
-        </nav>
-    )
-}
 
-export default Navbar
+            <ul className="hidden md:flex gap-8 text-sm tracking-wide text-white/80">
+                <li className="cursor-pointer hover:text-white transition-colors">Features</li>
+                <li className="cursor-pointer hover:text-white transition-colors">Impact</li>
+                <li className="cursor-pointer hover:text-white transition-colors">Community</li>
+                <li className="cursor-pointer hover:text-white transition-colors">Contact</li>
+            </ul>
+
+            <div className="flex items-center gap-3">
+                <button
+                    onClick={() => navigate("/login")}
+                    className="text-sm text-white/80 hover:text-white px-4 py-2 rounded-lg border border-white/20 hover:border-white/50 transition-all"
+                >
+                    Log in
+                </button>
+                <button
+                    onClick={() => navigate("/signup")}
+                    className="text-sm bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors"
+                >
+                    Sign up
+                </button>
+            </div>
+        </nav>
+    );
+}

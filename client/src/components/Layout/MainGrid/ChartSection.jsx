@@ -6,7 +6,7 @@ const ChartSection = () => {
   const [open, setOpen] = useState(false);
 
   return (
-     <div className="flex items-center justify-center bg-linear-to-br from-cyan-100 via-sky-200 to-cyan-100 p-4 h-[350px] w-[800px] ml-15 mt-6 mb-5 rounded-2xl ">
+     <div className="flex items-center justify-center bg-gradient-to-br from-cyan-100 via-sky-200 to-cyan-100 p-4 h-[350px] w-[800px] ml-15 mt-6 mb-5 rounded-2xl ">
     <div
       className="
         w-[800px]
@@ -16,7 +16,7 @@ const ChartSection = () => {
         flex flex-col
         
         /* Light Glassmorphism Styles */
-      bg-linear-to-br from-cyan-100 via-sky-200 to-cyan-100
+      bg-gradient-to-br from-cyan-100 via-sky-200 to-cyan-100
         backdrop-blur-2xl
         border border-white/60
         shadow-xl shadow-sky-200/30

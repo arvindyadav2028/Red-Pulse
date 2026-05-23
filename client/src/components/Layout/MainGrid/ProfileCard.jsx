@@ -28,7 +28,7 @@ const StatCard = ({ icon: Icon, value, label }) => {
 const ProfileCard = () => {
   return (
     // A wrapper with a background is needed to see the glassmorphism effect
-    <div className="flex items-center justify-center bg-linear-to-br from-cyan-100 via-sky-200 to-cyan-100 p-4 h-[350px] w-[800px] ml-15 mt-9 rounded-2xl">
+    <div className="flex items-center justify-center bg-gradient-to-br from-cyan-100 via-sky-200 to-cyan-100 p-4 h-[350px] w-[800px] ml-15 mt-9 rounded-2xl">
       
       {/* Main Glassmorphic Div */}
       <div
@@ -39,7 +39,7 @@ const ProfileCard = () => {
           rounded-3xl
           flex flex-col
           backdrop-blur-2xl
-          bg-linear-to-br from-sky-100/50 to-sky-50/30
+          bg-gradient-to-br from-sky-100/50 to-sky-50/30
           border border-white/50
           shadow-xl shadow-sky-200/30
         "

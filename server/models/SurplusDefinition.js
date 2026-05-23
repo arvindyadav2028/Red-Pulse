@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const surplusDefinitionSchema = new mongoose.Schema({
   status: {
@@ -42,4 +42,4 @@ const SurplusDefinition = mongoose.model(
   "SurplusDefinition",
   surplusDefinitionSchema,
 );
-module.exports = SurplusDefinition;
+export default SurplusDefinition;

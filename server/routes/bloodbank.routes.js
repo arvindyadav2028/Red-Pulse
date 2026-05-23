@@ -1,5 +1,5 @@
-import express from "express";
-const router = express.Router();
+import { Router } from "express";
+const router = Router();
 
 import BloodBank from "../models/BloodBank.js";
 import verifyToken from "../middleware/verifyToken.js";
@@ -100,4 +100,4 @@ router.delete(
     })
 );
 
-module.exports = router;
+export default router;

@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const logSchema = new mongoose.Schema({
     donorId: {
@@ -96,7 +96,7 @@ logSchema.index({ bloodBankId: 1, donationDate: -1 });
 logSchema.index({ location: "2dsphere" });
 
 const DonorLog = mongoose.model("DonorLog", logSchema);
-module.exports = DonorLog;
+export default DonorLog;
 
 
 //Indexes are used to speed up queries. Without them MongoDB scans every document in a collection to find matches — called a collection scan.
